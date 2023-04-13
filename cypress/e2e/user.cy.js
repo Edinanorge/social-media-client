@@ -7,17 +7,21 @@ describe("Social media app: Authenticated user", () => {
   });
 
   it("CAN login with valid credentilas and access their profile ", () => {
+    // login
     cy.login(Cypress.env("EMAIL"), Cypress.env("PASSWORD"));
+    // access profile
     cy.get(".profile > .btn").should("be.visible").contains("edina1");
     cy.url().should("include", "profile");
   });
 
   it("CAN logout with the logout button", () => {
+    // login
     cy.login(Cypress.env("EMAIL"), Cypress.env("PASSWORD"));
+    // logout
     cy.get("header [data-auth='logout']")
       .should("be.visible")
       .click({ force: true });
-
+    // check localstorage
     cy.clearLocalStorage().should(() => {
       expect(localStorage.getItem("token")).to.be.null;
       expect(localStorage.getItem("profile")).to.be.null;
